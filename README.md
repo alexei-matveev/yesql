@@ -1,8 +1,7 @@
 # Yesql - Clojure & SQL rethought.
 
-Yesql is a Clojure library for _using_ SQL.
-
-[![Build Status](https://travis-ci.org/krisajenkins/yesql.png?branch=travis)](https://travis-ci.org/krisajenkins/yesql)
+Yesql is a Clojure library for _using_ SQL.  This is a fork from the
+[Original](https://github.com/krisajenkins/yesql).
 
 ## Installation
 
