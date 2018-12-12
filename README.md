@@ -4,6 +4,21 @@ Yesql is a Clojure library for _using_ SQL.
 
 [![Build Status](https://travis-ci.org/krisajenkins/yesql.png?branch=travis)](https://travis-ci.org/krisajenkins/yesql)
 
+## Status
+
+Frozen. Maintainer sought.
+
+Tested with Clojure 1.5-1.9-alpha20, but there will be no new development unless a maintainer steps up.
+
+
+(I've been promising myself for ages that I'll get round to all the feature
+requests the next time I'm working on a Clojure/SQL project. But that's been a
+long while now, so maybe it's time to admit that this project needs a more
+active pair of hands. If you'd like to take it on, please [contact
+me](https://twitter.com/krisajenkins).
+
+(You might also consider [hugsql](https://www.hugsql.org/) which is philosophically similar and actively maintained.)
+
 ## Installation
 
 Add this to your [Leiningen](https://github.com/technomancy/leiningen) `:dependencies`:
@@ -21,6 +36,7 @@ check, because there may be a newer version available):
 |Oracle|`[com.oracle/ojdbc14 "10.2.0.4.0"]`|
 |SQLite|`[org.xerial/sqlite-jdbc "3.7.2"]`|
 |Derby|`[org.apache.derby/derby "10.11.1.1"]`|
+|h2|`[com.h2database/h2 "1.4.191"]`|
 
 (Any database with a JDBC driver should work. If you know of a driver
 that's not listed here, please open a pull request to update this
@@ -65,7 +81,7 @@ query:
 -- name: users-by-country
 SELECT *
 FROM users
-WHERE country_code = :country
+WHERE country_code = :country_code
 ```
 
 ...and then read that file to turn it into a regular Clojure function:
@@ -76,8 +92,8 @@ WHERE country_code = :country
 
 ;;; A function with the name `users-by-country` has been created.
 ;;; Let's use it:
-(users-by-country {:country "GB"})
-;=> ({:name "Kris" :country "GB" ...} ...)
+(users-by-country {:country_code "GB"})
+;=> ({:name "Kris" :country_code "GB" ...} ...)
 ```
 
 By keeping the SQL and Clojure separate you get:
@@ -141,7 +157,7 @@ in the REPL:
 
 ;=> -------------------------
 ;=> user/users-by-country
-;=> ([{:keys [country_code]}] 
+;=> ([{:keys [country_code]}]
 ;=>  [{:keys [country_code]} {:keys [connection]}])
 ;=>
 ;=>   Counts the users in a given country.
@@ -151,15 +167,15 @@ Now we can use it:
 
 ```clojure
 ; Use it standalone.
-(users-by-country {:country "GB"})
+(users-by-country {:country_code "GB"})
 ;=> ({:count 58})
 
 ; Use it in a clojure.java.jdbc transaction.
 (require '[clojure.java.jdbc :as jdbc])
 
 (jdbc/with-db-transaction [tx db-spec]
-   {:limeys (users-by-country {:country "GB"} {:connection tx})
-    :yanks  (users-by-country {:country "US"} {:connection tx})})
+   {:limeys (users-by-country {:country_code "GB"} {:connection tx})
+    :yanks  (users-by-country {:country_code "US"} {:connection tx})})
 ```
 
 ### One File, Many Queries
@@ -209,14 +225,14 @@ WHERE (
   OR
   country_code = ?
 )
-AND age < :maxage
+AND age < :max_age
 ```
 
 Supply the `?` parameters as a vector under the `:?` key, like so:
 
 ```clojure
 (young-users-by-country {:? ["GB" "US"]
-                         :maxage 18})
+                         :max_age 18})
 ```
 
 #### Selectively import queries
@@ -262,7 +278,7 @@ And then supply the `IN`-list as a vector, like so:
    {:connection db-spec})
 
 (find-users {:id [1001 1003 1005]
-             :maxage 18})
+             :min_age 18})
 ```
 
 The query will be automatically expanded to `... IN (1001, 1003, 1005)
@@ -388,10 +404,7 @@ Yesql has inspired ports to other languages:
 |Ruby|[yayql](https://github.com/gnarmis/yayql)|
 |Erlang|[eql](https://github.com/artemeff/eql)|
 |Clojure|[YeSPARQL](https://github.com/joelkuiper/yesparql)|
-
-## Status
-
-Ready to use. The API is subject to change. Feedback is welcomed.
+|PHP|[YepSQL](https://github.com/LionsHead/YepSQL)|
 
 ## License
 
