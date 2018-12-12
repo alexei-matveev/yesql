@@ -5,9 +5,10 @@ Yesql is a Clojure library for _using_ SQL.  This is a fork from the
 
 ## Installation
 
-Add this to your [Leiningen](https://github.com/technomancy/leiningen) `:dependencies`:
+Add this to your [Leiningen](https://github.com/technomancy/leiningen)
+`:dependencies`, note the group ID that differs from the original:
 
-[![Clojars Project](http://clojars.org/yesql/latest-version.svg)](http://clojars.org/yesql)
+[![Clojars Project](http://clojars.org/f0bec0d/yesql/latest-version.svg)](http://clojars.org/f0bec0d/yesql)
 
 ### Driver
 Plus you'll want a database driver. Here are some examples (but double
